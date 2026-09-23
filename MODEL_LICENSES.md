@@ -72,3 +72,4 @@ No model weights are distributed inside the Git repository. Weights are retrieve
 - Hugging Face Hub (cached in `models/` directory, excluded via `.gitignore`).
 - Local hashes (SHA-256) are verified on load to prevent tampering.
 - Offline mode: If no internet connection is detected, AlfaazStudio automatically falls back to cached weights or the built-in Mock TTS engine.
+

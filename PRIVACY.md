@@ -60,3 +60,4 @@ AlfaazStudio interacts with the network strictly under the following optional ci
 ## 6. Inquiries & Community Verification
 
 Because AlfaazStudio is completely open-source, the community is encouraged to audit our codebase, network activity, and build scripts to verify our zero-telemetry and offline guarantees.
+

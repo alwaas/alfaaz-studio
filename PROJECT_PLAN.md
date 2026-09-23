@@ -106,3 +106,4 @@ AlfaazStudio utilizes RALF Mode (Reinforcement Learning from AI Feedback):
 2. **Quality Threshold**: A phase only qualifies as complete when the confidence score is >= 85%.
 3. **Rollback Safety**: Any catastrophic failure after 5 attempts rolls back to the prior checkpoint and flags human intervention.
 4. **Auditability**: Every phase transition is recorded in `PROGRESS.md` and committed with milestone git tags.
+

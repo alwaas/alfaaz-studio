@@ -28,6 +28,9 @@ class Settings(BaseSettings):
     PORT: int = 8000
     BACKEND_CORS_ORIGINS: list[str] = ["http://localhost:3000", "http://127.0.0.1:3000"]
 
+    # Database
+    DATABASE_URL: str = "sqlite+aiosqlite:///./alfaaz.db"
+
     # Compute
     DEVICE: str = "auto"
     CUDA_VISIBLE_DEVICES: str = "0"
@@ -38,6 +41,7 @@ class Settings(BaseSettings):
     MODEL_DIR: Path = Field(default_factory=lambda: Path("./models"))
     OUTPUT_DIR: Path = Field(default_factory=lambda: Path("./outputs"))
     TEMP_DIR: Path = Field(default_factory=lambda: Path("./temp"))
+    DATA_DIR: Path = Field(default_factory=lambda: Path("./data"))
 
     # TTS Settings
     DEFAULT_TTS_ENGINE: str = "f5-tts"
@@ -51,9 +55,31 @@ class Settings(BaseSettings):
     DEFAULT_FONT_NAME: str = "Jameel Noori Nastaleeq"
     FALLBACK_FONT_NAME: str = "Noto Nastaliq Urdu"
 
-    # Concurrency
+    # Concurrency & Logging
     MAX_CONCURRENT_RENDERS: int = 2
     LOG_LEVEL: str = "INFO"
+
+    def get_resolved_path(self, path: Path) -> Path:
+        """Resolve path relative to BASE_DIR if not absolute."""
+        if path.is_absolute():
+            return path
+        return (self.BASE_DIR / path).resolve()
+
+    @property
+    def resolved_model_dir(self) -> Path:
+        return self.get_resolved_path(self.MODEL_DIR)
+
+    @property
+    def resolved_output_dir(self) -> Path:
+        return self.get_resolved_path(self.OUTPUT_DIR)
+
+    @property
+    def resolved_temp_dir(self) -> Path:
+        return self.get_resolved_path(self.TEMP_DIR)
+
+    @property
+    def resolved_data_dir(self) -> Path:
+        return self.get_resolved_path(self.DATA_DIR)
 
 
 settings = Settings()
