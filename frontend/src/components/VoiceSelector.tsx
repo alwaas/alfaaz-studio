@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Mic, Sliders, Upload, CheckCircle2, ShieldAlert } from "lucide-react";
+import { VoiceRecorder } from "./VoiceRecorder";
 
 interface VoiceSelectorProps {
   engine: string;
@@ -62,6 +63,7 @@ export function VoiceSelector({
   onSelectReferenceFile,
 }: VoiceSelectorProps) {
   const [dragActive, setDragActive] = useState(false);
+  const [isRecorderOpen, setIsRecorderOpen] = useState(false);
 
   const selectedEngineObj = TTS_ENGINES.find((e) => e.id === engine) || TTS_ENGINES[0];
 
@@ -172,21 +174,34 @@ export function VoiceSelector({
                 </button>
               </div>
             ) : (
-              <div>
-                <Upload className="w-6 h-6 text-studio-muted mx-auto mb-2" />
-                <label className="cursor-pointer text-xs font-medium text-studio-gold hover:underline">
-                  <span>Browse audio file</span>
-                  <input
-                    type="file"
-                    accept="audio/*,.wav,.mp3"
-                    className="hidden"
-                    onChange={(e) => {
-                      if (e.target.files && e.target.files[0]) {
-                        onSelectReferenceFile(e.target.files[0]);
-                      }
-                    }}
-                  />
-                </label>
+              <div className="py-2">
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-2">
+                  <button
+                    type="button"
+                    onClick={() => setIsRecorderOpen(true)}
+                    className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-studio-gold to-studio-amber text-studio-bg font-bold text-xs shadow-gold hover:opacity-95 transition-all flex items-center gap-2 cursor-pointer"
+                  >
+                    <Mic className="w-4 h-4" />
+                    <span>Record Live Voice</span>
+                  </button>
+
+                  <span className="text-xs text-studio-muted">or</span>
+
+                  <label className="cursor-pointer px-4 py-2.5 rounded-xl bg-studio-card border border-studio-border hover:border-studio-gold text-xs font-medium text-studio-text transition-all flex items-center gap-2">
+                    <Upload className="w-4 h-4 text-studio-gold" />
+                    <span>Browse audio file</span>
+                    <input
+                      type="file"
+                      accept="audio/*,.wav,.mp3"
+                      className="hidden"
+                      onChange={(e) => {
+                        if (e.target.files && e.target.files[0]) {
+                          onSelectReferenceFile(e.target.files[0]);
+                        }
+                      }}
+                    />
+                  </label>
+                </div>
                 <p className="text-[10px] text-studio-muted mt-1">or drag & drop audio here</p>
               </div>
             )}
@@ -263,6 +278,16 @@ export function VoiceSelector({
           />
         </div>
       </div>
+
+      {/* Live Voice Recorder Modal */}
+      <VoiceRecorder
+        isOpen={isRecorderOpen}
+        onClose={() => setIsRecorderOpen(false)}
+        onSaveRecording={(recordedFile) => {
+          onSelectReferenceFile(recordedFile);
+          setIsRecorderOpen(false);
+        }}
+      />
     </div>
   );
 }
