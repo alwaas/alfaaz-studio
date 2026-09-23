@@ -1,0 +1,41 @@
+{
+  "project": {
+    "name": "AlfaazStudio",
+    "description": "Urdu Poetry AI Voice-over Studio for Instagram Reels",
+    "version": "0.1.0"
+  },
+  "runtime": {
+    "python": "3.11",
+    "node": "20",
+    "docker": true
+  },
+  "features": {
+    "autoCommit": true,
+    "autoTest": true,
+    "gpuSupport": true,
+    "cudaVersion": "12.1",
+    "ralfMode": true,
+    "autonomousLoop": true,
+    "selfReview": true,
+    "humanIntervention": "minimal"
+  },
+  "paths": {
+    "backend": "backend/",
+    "frontend": "frontend/",
+    "models": "models/",
+    "outputs": "outputs/",
+    "temp": "temp/"
+  },
+  "secrets": {
+    "envFile": ".env.example"
+  },
+  "ralf": {
+    "enabled": true,
+    "maxIterationsPerPhase": 5,
+    "autoFixErrors": true,
+    "selfReviewThreshold": 0.85,
+    "progressCheckpoint": "after_each_phase",
+    "notificationOnCompletion": true,
+    "rollbackOnError": true
+  }
+}
