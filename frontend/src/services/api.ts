@@ -10,6 +10,9 @@ import {
   Job,
   Project,
   ProjectCreateInput,
+  ReelRenderRequest,
+  ReelRenderResponse,
+  ReelThemePreset,
   SystemDeviceTelemetry,
   VoiceProfile,
 } from "@/types";
@@ -167,6 +170,29 @@ export const api = {
       body: JSON.stringify(params),
     });
     return handleResponse(res);
+  },
+
+  // 9:16 Reel Video Rendering
+  async getReelThemes(): Promise<ReelThemePreset[]> {
+    const res = await fetch(`${API_BASE}/rendering/themes`);
+    return handleResponse(res);
+  },
+
+  async renderReel(params: ReelRenderRequest): Promise<ReelRenderResponse> {
+    const res = await fetch(`${API_BASE}/rendering/render`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(params),
+    });
+    return handleResponse(res);
+  },
+
+  getVideoStreamUrl(videoId: string): string {
+    return `${API_BASE}/rendering/videos/${videoId}/stream`;
+  },
+
+  getVideoDownloadUrl(videoId: string): string {
+    return `${API_BASE}/rendering/videos/${videoId}/download`;
   },
 };
 

@@ -1,13 +1,11 @@
 """Unit tests for ModelManager and HardwareManager."""
 
-from pathlib import Path
 import tempfile
-import pytest
+from pathlib import Path
 
 from app.services.tts.model_manager import (
     HardwareManager,
     ModelManager,
-    ModelMetadata,
 )
 
 

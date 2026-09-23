@@ -1,7 +1,7 @@
 """TTS Provider Protocol and Result Data Structures."""
 
 from dataclasses import dataclass, field
-from typing import Any, Optional, Protocol, runtime_checkable
+from typing import Any, Protocol, runtime_checkable
 
 
 @dataclass
@@ -38,10 +38,10 @@ class TTSProvider(Protocol):
     async def synthesize(
         self,
         text: str,
-        voice: Optional[str] = None,
+        voice: str | None = None,
         speed: float = 1.0,
         pitch: float = 0.0,
-        reference_audio: Optional[str] = None,
+        reference_audio: str | None = None,
         **kwargs: Any,
     ) -> TTSResult:
         """

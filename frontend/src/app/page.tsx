@@ -1,16 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { Sparkles, Music, Wand2, AudioLines, SlidersHorizontal, Edit3 } from "lucide-react";
+import { Sparkles, Music, Wand2, AudioLines, SlidersHorizontal, Edit3, Film } from "lucide-react";
 import { PoetryEditor } from "@/components/PoetryEditor";
 import { VoiceSelector } from "@/components/VoiceSelector";
 import { GenerationModal } from "@/components/GenerationModal";
 import { AudioEditor } from "@/components/AudioEditor";
+import { ReelPreview } from "@/components/ReelPreview";
 import { api } from "@/services/api";
 import { Job, Project } from "@/types";
 
 export default function StudioHomePage() {
-  const [activeTab, setActiveTab] = useState<"compose" | "editor">("compose");
+  const [activeTab, setActiveTab] = useState<"compose" | "editor" | "reel">("compose");
   const [title, setTitle] = useState("دل ناداں");
   const [poetName, setPoetName] = useState("مرزا غالب");
   const [poetryText, setPoetryText] = useState(
@@ -26,6 +27,10 @@ export default function StudioHomePage() {
   // Audio Editor State
   const [activeAssetId, setActiveAssetId] = useState<string | null>(null);
   const [activeAudioUrl, setActiveAudioUrl] = useState<string | null>(null);
+
+  // Reel Video State
+  const [activeVideoId, setActiveVideoId] = useState<string | null>(null);
+  const [activeVideoUrl, setActiveVideoUrl] = useState<string | null>(null);
 
   // Job & Generation State
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -202,6 +207,23 @@ export default function StudioHomePage() {
             <span className="w-2 h-2 rounded-full bg-studio-emerald animate-pulse" />
           )}
         </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab("reel")}
+          className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+            activeTab === "reel"
+              ? "bg-studio-gold text-studio-bg shadow-gold font-bold"
+              : "bg-studio-card border border-studio-border text-studio-muted hover:text-studio-text"
+          }`}
+        >
+          <Film className="w-3.5 h-3.5" />
+          <span>3. Reel Video Preview & Export</span>
+          <span className="font-nastaliq text-xs ml-1">(ریل ویڈیو)</span>
+          {activeVideoUrl && (
+            <span className="w-2 h-2 rounded-full bg-studio-emerald animate-pulse" />
+          )}
+        </button>
       </div>
 
       {errorMsg && (
@@ -278,6 +300,22 @@ export default function StudioHomePage() {
           onMasteringComplete={(newId, newUrl) => {
             setActiveAssetId(newId);
             setActiveAudioUrl(newUrl);
+          }}
+        />
+      )}
+
+      {/* Tab 3: 9:16 Reel Video Production */}
+      {activeTab === "reel" && (
+        <ReelPreview
+          projectId={currentProject?.id}
+          audioAssetId={activeAssetId}
+          poetryVerses={poetryVerses}
+          title={title}
+          poetName={poetName}
+          initialVideoUrl={activeVideoUrl}
+          onRenderComplete={(newVideoId, newUrl) => {
+            setActiveVideoId(newVideoId);
+            setActiveVideoUrl(newUrl);
           }}
         />
       )}

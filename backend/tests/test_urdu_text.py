@@ -1,6 +1,5 @@
 """Unit tests for Urdu text normalization and poetic structure parsing."""
 
-import pytest
 from app.utils.urdu_text import (
     URDU_COMMA,
     URDU_KHATMA,

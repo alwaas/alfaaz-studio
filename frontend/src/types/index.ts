@@ -152,3 +152,34 @@ export interface PoetryPreset {
   lines: string[];
 }
 
+export interface ReelThemePreset {
+  id: string;
+  name: string;
+  description: string;
+  bg_color_hex: string;
+  accent_color_hex: string;
+}
+
+export interface ReelRenderRequest {
+  project_id: string;
+  audio_asset_id: string;
+  theme_id?: string;
+  bg_video_path?: string | null;
+  font_name?: string;
+  font_size?: number;
+  enable_karaoke?: boolean;
+  fps?: number;
+}
+
+export interface ReelRenderResponse {
+  video_asset_id: string;
+  project_id: string;
+  filename: string;
+  duration: number;
+  resolution: string;
+  fps: number;
+  stream_url: string;
+  download_url: string;
+  status: string;
+}
+

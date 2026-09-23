@@ -18,6 +18,11 @@ from app.schemas.project import (
     ProjectUpdate,
     VideoAssetResponse,
 )
+from app.schemas.rendering import (
+    ReelRenderRequest,
+    ReelRenderResponse,
+    ReelThemePreset,
+)
 from app.schemas.system import (
     DeviceInfoResponse,
     HealthResponse,
@@ -56,4 +61,7 @@ __all__ = [
     "AudioMasteringRequest",
     "AudioTrimRequest",
     "AudioMasteringResponse",
+    "ReelThemePreset",
+    "ReelRenderRequest",
+    "ReelRenderResponse",
 ]

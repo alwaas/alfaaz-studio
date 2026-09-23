@@ -1,6 +1,7 @@
 """Celery application and worker configuration."""
 
 from celery import Celery  # type: ignore[import-untyped]
+
 from app.config import settings
 
 # Initialize Celery app

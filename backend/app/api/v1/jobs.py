@@ -3,6 +3,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+
 from app.db.models import Job
 from app.db.session import get_db
 from app.schemas.job import JobLogsResponse, JobResponse

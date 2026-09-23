@@ -8,9 +8,9 @@ Implements studio-grade audio effects:
 - Loudness Normalization (-1.0 dBFS peak ceiling, -14.0 LUFS target)
 """
 
-from dataclasses import dataclass
 import io
 import math
+from dataclasses import dataclass
 
 import numpy as np
 import scipy.signal  # type: ignore[import-untyped]

@@ -1,6 +1,5 @@
 """Unit tests for Urdu Pronunciation Dictionary system."""
 
-import pytest
 from app.utils.urdu_text import PronunciationDictionary, pronunciation_dict
 
 

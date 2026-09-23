@@ -492,6 +492,66 @@ class RalfValidator:
 
         return confidence, self.errors
 
+    def validate_phase_7(self) -> Tuple[float, List[str]]:
+        """Validate Phase 7 completion (Reel Rendering)"""
+        print("\n=== RALF Mode: Phase 7 Self-Review (Reel Rendering) ===\n")
+
+        # Check backend files
+        self.check_file_exists("backend/app/services/subtitles.py", "ASS subtitle generator service")
+        self.check_file_exists("backend/app/services/renderer.py", "FFmpeg reel renderer service")
+        self.check_file_exists("backend/app/schemas/rendering.py", "Reel rendering schemas")
+        self.check_file_exists("backend/app/api/v1/rendering.py", "Reel rendering API endpoints")
+
+        # Check test files
+        self.check_file_exists("backend/tests/test_subtitles.py", "Subtitle generator test suite")
+        self.check_file_exists("backend/tests/test_renderer.py", "Renderer service test suite")
+        self.check_file_exists("backend/tests/test_rendering_api.py", "Rendering API test suite")
+
+        # Check frontend components & tests
+        self.check_file_exists("frontend/src/components/ReelPreview.tsx", "ReelPreview UI component")
+        self.check_file_exists("frontend/src/components/__tests__/ReelPreview.test.tsx", "ReelPreview unit tests")
+
+        # Check file content quality and critical symbols
+        self.check_file_content(
+            "backend/app/services/subtitles.py",
+            ["ASSSubtitleBuilder", "SubtitleVerse", "format_ass_time", "build_ass_content"],
+            "ASS subtitle generation classes in subtitles.py",
+        )
+        self.check_file_content(
+            "backend/app/services/renderer.py",
+            ["ReelRenderer", "REEL_THEMES", "render_reel", "build_render_command"],
+            "FFmpeg 9:16 rendering pipeline in renderer.py",
+        )
+        self.check_file_content(
+            "backend/app/api/v1/rendering.py",
+            ["/themes", "/render", "/videos/{video_id}/stream", "/videos/{video_id}/download"],
+            "Reel rendering endpoints in rendering.py",
+        )
+        self.check_file_content(
+            "frontend/src/components/ReelPreview.tsx",
+            ["handleRenderReel", "selectedThemeId", "1080x1920", "ReelRenderRequest"],
+            "9:16 vertical smartphone preview in ReelPreview.tsx",
+        )
+        self.check_file_content(
+            "frontend/src/services/api.ts",
+            ["renderReel", "getReelThemes", "getVideoStreamUrl"],
+            "Reel rendering methods in api.ts",
+        )
+
+        confidence = self.calculate_confidence()
+
+        print("\n=== Self-Review Summary ===")
+        print(f"Checks Passed: {self.checks_passed}/{self.checks_total}")
+        print(f"Confidence Score: {confidence:.2%}")
+        print(f"Errors: {len(self.errors)}")
+
+        if self.errors:
+            print("\n=== Errors ===")
+            for error in self.errors:
+                print(f"  - {error}")
+
+        return confidence, self.errors
+
     def update_progress_file(self, phase: int, confidence: float, errors: List[str]):
         """Update PROGRESS.md file"""
         phase_names = {
@@ -550,6 +610,8 @@ if __name__ == "__main__":
         confidence, errors = validator.validate_phase_5()
     elif args.phase == 6:
         confidence, errors = validator.validate_phase_6()
+    elif args.phase == 7:
+        confidence, errors = validator.validate_phase_7()
     else:
         print(f"Phase {args.phase} validator not yet implemented")
         sys.exit(1)

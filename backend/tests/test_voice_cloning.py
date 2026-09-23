@@ -1,8 +1,8 @@
 """Unit tests for Voice Cloning Audio Preprocessor."""
 
-import io
-from pathlib import Path
 import tempfile
+from pathlib import Path
+
 import numpy as np
 import pytest
 import soundfile as sf  # type: ignore[import-untyped]
