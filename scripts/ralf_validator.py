@@ -215,8 +215,96 @@ class RalfValidator:
 
         return confidence, self.errors
 
+    def validate_phase_3(self) -> Tuple[float, List[str]]:
+        """Validate Phase 3 completion"""
+        print("\n=== RALF Mode: Phase 3 Self-Review (Mock TTS & Urdu Utils) ===\n")
+
+        # Check directories
+        self.check_directory_exists("backend/app/services/tts", "TTS services directory")
+        self.check_directory_exists("backend/app/utils", "Utilities directory")
+
+        # Check TTS provider files
+        self.check_file_exists("backend/app/services/tts/provider.py", "TTS Provider Protocol")
+        self.check_file_exists("backend/app/services/tts/mock_provider.py", "Mock TTS Provider")
+        self.check_file_exists("backend/app/services/tts/factory.py", "TTS Provider Factory")
+
+        # Check Urdu text utility files
+        self.check_file_exists("backend/app/utils/urdu_text.py", "Urdu Text Utilities")
+
+        # Check Celery and Queue files
+        self.check_file_exists("backend/app/core/celery_app.py", "Celery configuration")
+        self.check_file_exists("backend/app/services/queue.py", "Queue service & tasks")
+
+        # Check API & Schemas
+        self.check_file_exists("backend/app/schemas/job.py", "Job schemas")
+        self.check_file_exists("backend/app/api/v1/jobs.py", "Job API endpoints")
+
+        # Check tests
+        self.check_file_exists("backend/tests/test_mock_tts.py", "Mock TTS tests")
+        self.check_file_exists("backend/tests/test_urdu_text.py", "Urdu text tests")
+        self.check_file_exists("backend/tests/test_job_queue.py", "Job queue tests")
+        self.check_file_exists("backend/tests/test_pronunciation_dict.py", "Pronunciation dict tests")
+
+        # Check content quality
+        self.check_file_content(
+            "backend/app/services/tts/provider.py",
+            ["TTSProvider", "TTSResult", "WordTimestamp"],
+            "TTS provider protocol definitions",
+        )
+        self.check_file_content(
+            "backend/app/services/tts/mock_provider.py",
+            ["MockTTSProvider", "440", "validate_speed"],
+            "Mock provider sine generation and speed",
+        )
+        self.check_file_content(
+            "backend/app/utils/urdu_text.py",
+            ["UrduTextNormalizer", "PronunciationDictionary", "split_verses", "split_couplets"],
+            "Urdu text normalizer and poetry chunking",
+        )
+        self.check_file_content(
+            "backend/app/core/celery_app.py",
+            ["Celery", "celery_app"],
+            "Celery application instance",
+        )
+        self.check_file_content(
+            "backend/app/services/queue.py",
+            ["execute_audio_generation", "create_task_chain", "mark_job_cancelled"],
+            "Queue audio processing and chaining",
+        )
+        self.check_file_content(
+            "backend/app/api/v1/projects.py",
+            ["generate-audio", "BackgroundTasks"],
+            "Projects audio generation endpoint",
+        )
+
+        confidence = self.calculate_confidence()
+
+        print("\n=== Self-Review Summary ===")
+        print(f"Checks Passed: {self.checks_passed}/{self.checks_total}")
+        print(f"Confidence Score: {confidence:.2%}")
+        print(f"Errors: {len(self.errors)}")
+
+        if self.errors:
+            print("\n=== Errors ===")
+            for error in self.errors:
+                print(f"  - {error}")
+
+        return confidence, self.errors
+
     def update_progress_file(self, phase: int, confidence: float, errors: List[str]):
         """Update PROGRESS.md file"""
+        phase_names = {
+            1: "Architecture & Compliance",
+            2: "Backend Foundation",
+            3: "Mock TTS & Urdu Utils",
+            4: "Real Urdu TTS Integration",
+            5: "Frontend Foundation",
+            6: "Audio Editor",
+            7: "Reel Rendering",
+            8: "Production Hardening",
+        }
+        phase_name = phase_names.get(phase, f"Phase {phase}")
+
         progress_file = self.project_root / "PROGRESS.md"
         if not progress_file.exists():
             print("Warning: PROGRESS.md not found, creating...")
@@ -225,7 +313,7 @@ class RalfValidator:
         content = progress_file.read_text(encoding="utf-8")
 
         # Update current phase
-        content = re.sub(r"\*\*Current Phase\*\*:\s*.*", f"**Current Phase**: {phase} (Backend Foundation)", content)
+        content = re.sub(r"\*\*Current Phase\*\*:\s*.*", f"**Current Phase**: {phase} ({phase_name})", content)
 
         # Update progress percentage
         progress_pct = (phase / 8.0) * 100
@@ -236,10 +324,8 @@ class RalfValidator:
 
         # Update status
         status = "✅ Complete" if confidence >= 0.85 else "❌ Needs Review"
-        if phase == 1:
-            content = re.sub(r"(## Phase 1: Architecture & Compliance[\s\S]*?### Status:\s*)[^\n]+", rf"\g<1>{status}", content)
-        elif phase == 2:
-            content = re.sub(r"(## Phase 2: Backend Foundation[\s\S]*?### Status:\s*)[^\n]+", rf"\g<1>{status}", content)
+        section_pattern = rf"(## Phase {phase}: [^\n]+[\s\S]*?### Status:\s*)[^\n]+"
+        content = re.sub(section_pattern, rf"\g<1>{status}", content)
 
         progress_file.write_text(content, encoding="utf-8")
         print("\n✅ PROGRESS.md updated")
@@ -247,7 +333,7 @@ class RalfValidator:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="RALF Mode Phase Validator")
-    parser.add_argument("--phase", type=int, default=2, help="Phase number to validate (1-8)")
+    parser.add_argument("--phase", type=int, default=3, help="Phase number to validate (1-8)")
     args = parser.parse_args()
 
     validator = RalfValidator()
@@ -255,6 +341,8 @@ if __name__ == "__main__":
         confidence, errors = validator.validate_phase_1()
     elif args.phase == 2:
         confidence, errors = validator.validate_phase_2()
+    elif args.phase == 3:
+        confidence, errors = validator.validate_phase_3()
     else:
         print(f"Phase {args.phase} validator not yet implemented")
         sys.exit(1)

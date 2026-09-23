@@ -1,19 +1,22 @@
 """Initial schema creation
 
 Revision ID: 0001_initial_schema
-Revises: 
+Revises:
 Create Date: 2026-09-23 12:45:00.000000
 
 """
-from typing import Sequence, Union
-from alembic import op
+
+from collections.abc import Sequence
+
 import sqlalchemy as sa
+
+from alembic import op
 
 # revision identifiers, used by Alembic.
 revision: str = "0001_initial_schema"
-down_revision: Union[str, None] = None
-branch_labels: Union[str, Sequence[str], None] = None
-depends_on: Union[str, Sequence[str], None] = None
+down_revision: str | None = None
+branch_labels: str | Sequence[str] | None = None
+depends_on: str | Sequence[str] | None = None
 
 
 def upgrade() -> None:
@@ -42,7 +45,12 @@ def upgrade() -> None:
         sa.Column("description", sa.Text(), nullable=True),
         sa.Column("raw_poetry", sa.Text(), nullable=False),
         sa.Column("normalized_poetry", sa.Text(), nullable=True),
-        sa.Column("voice_id", sa.String(length=36), sa.ForeignKey("voice_profiles.id", ondelete="SET NULL"), nullable=True),
+        sa.Column(
+            "voice_id",
+            sa.String(length=36),
+            sa.ForeignKey("voice_profiles.id", ondelete="SET NULL"),
+            nullable=True,
+        ),
         sa.Column("bgm_path", sa.String(length=500), nullable=True),
         sa.Column("dsp_settings", sa.JSON(), nullable=True),
         sa.Column("subtitle_settings", sa.JSON(), nullable=True),
@@ -57,7 +65,12 @@ def upgrade() -> None:
     op.create_table(
         "audio_assets",
         sa.Column("id", sa.String(length=36), primary_key=True, nullable=False),
-        sa.Column("project_id", sa.String(length=36), sa.ForeignKey("projects.id", ondelete="CASCADE"), nullable=True),
+        sa.Column(
+            "project_id",
+            sa.String(length=36),
+            sa.ForeignKey("projects.id", ondelete="CASCADE"),
+            nullable=True,
+        ),
         sa.Column("filename", sa.String(length=255), nullable=False),
         sa.Column("file_path", sa.String(length=500), nullable=False),
         sa.Column("file_size", sa.Integer(), nullable=False),
@@ -74,7 +87,12 @@ def upgrade() -> None:
     op.create_table(
         "video_assets",
         sa.Column("id", sa.String(length=36), primary_key=True, nullable=False),
-        sa.Column("project_id", sa.String(length=36), sa.ForeignKey("projects.id", ondelete="CASCADE"), nullable=True),
+        sa.Column(
+            "project_id",
+            sa.String(length=36),
+            sa.ForeignKey("projects.id", ondelete="CASCADE"),
+            nullable=True,
+        ),
         sa.Column("filename", sa.String(length=255), nullable=False),
         sa.Column("file_path", sa.String(length=500), nullable=False),
         sa.Column("file_size", sa.Integer(), nullable=False),
@@ -91,7 +109,12 @@ def upgrade() -> None:
         "jobs",
         sa.Column("id", sa.String(length=36), primary_key=True, nullable=False),
         sa.Column("job_type", sa.String(length=50), nullable=False),
-        sa.Column("project_id", sa.String(length=36), sa.ForeignKey("projects.id", ondelete="CASCADE"), nullable=True),
+        sa.Column(
+            "project_id",
+            sa.String(length=36),
+            sa.ForeignKey("projects.id", ondelete="CASCADE"),
+            nullable=True,
+        ),
         sa.Column("status", sa.String(length=50), server_default="queued", nullable=False),
         sa.Column("progress", sa.Float(), server_default="0.0", nullable=False),
         sa.Column("error_message", sa.Text(), nullable=True),

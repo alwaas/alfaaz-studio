@@ -31,6 +31,12 @@ class Settings(BaseSettings):
     # Database
     DATABASE_URL: str = "sqlite+aiosqlite:///./alfaaz.db"
 
+    # Queue & Redis
+    REDIS_URL: str = "redis://localhost:6379/0"
+    CELERY_BROKER_URL: str = "redis://localhost:6379/0"
+    CELERY_RESULT_BACKEND: str = "redis://localhost:6379/0"
+    CELERY_TASK_ALWAYS_EAGER: bool = True
+
     # Compute
     DEVICE: str = "auto"
     CUDA_VISIBLE_DEVICES: str = "0"

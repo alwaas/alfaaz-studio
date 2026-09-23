@@ -10,17 +10,21 @@ from sqlalchemy.ext.asyncio import (
     async_sessionmaker,
     create_async_engine,
 )
+from sqlalchemy.pool import StaticPool
 
 from app.db.base import Base
 from app.db.models import VoiceProfile
 from app.db.session import get_db
 from app.main import app
+from app.services import queue as queue_module
 
-# Use isolated in-memory SQLite database for test suite
+# Use isolated in-memory SQLite database for test suite with StaticPool
 TEST_DATABASE_URL = "sqlite+aiosqlite:///:memory:"
 
 test_engine = create_async_engine(
     TEST_DATABASE_URL,
+    connect_args={"check_same_thread": False},
+    poolclass=StaticPool,
     echo=False,
     future=True,
 )
@@ -32,6 +36,9 @@ test_session_factory = async_sessionmaker(
     autocommit=False,
     autoflush=False,
 )
+
+# Direct background tasks to use test_session_factory during test runs
+queue_module.async_session_factory = test_session_factory
 
 
 @pytest.fixture(scope="session", autouse=True)

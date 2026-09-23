@@ -1,16 +1,18 @@
 """Project management endpoints."""
 
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from app.db.models import Project, VoiceProfile
+from app.db.models import Job, Project, VoiceProfile
 from app.db.session import get_db
+from app.schemas.job import GenerateAudioRequest, JobResponse
 from app.schemas.project import (
     ProjectCreate,
     ProjectResponse,
 )
+from app.services.queue import append_job_log, execute_audio_generation
 
 router = APIRouter(prefix="/projects", tags=["Projects"])
 
@@ -155,3 +157,68 @@ async def delete_project(
 
     await db.delete(project)
     await db.commit()
+
+
+@router.post(
+    "/{project_id}/generate-audio",
+    response_model=JobResponse,
+    status_code=status.HTTP_202_ACCEPTED,
+    summary="Generate speech audio for project",
+    description="Enqueue an asynchronous job to synthesize poetry speech audio.",
+)
+async def generate_project_audio(
+    project_id: str,
+    payload: GenerateAudioRequest,
+    background_tasks: BackgroundTasks,
+    db: AsyncSession = Depends(get_db),
+) -> JobResponse:
+    """Trigger background audio generation pipeline for a project."""
+    # 1. Verify project exists
+    query = select(Project).where(Project.id == project_id)
+    result = await db.execute(query)
+    project = result.scalar_one_or_none()
+
+    if not project:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Project with id '{project_id}' not found",
+        )
+
+    # 2. Verify voice exists if specified
+    target_voice_id = payload.voice_id or project.voice_id
+    if target_voice_id:
+        voice_res = await db.execute(select(VoiceProfile).where(VoiceProfile.id == target_voice_id))
+        if not voice_res.scalar_one_or_none():
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Voice profile with id '{target_voice_id}' does not exist",
+            )
+
+    # 3. Create Job entity
+    job = Job(
+        job_type="tts_synthesis",
+        project_id=project.id,
+        status="queued",
+        progress=0.0,
+        payload={
+            "speed": payload.speed,
+            "pitch": payload.pitch,
+            "voice_id": target_voice_id,
+        },
+    )
+    db.add(job)
+    await db.commit()
+    await db.refresh(job)
+
+    append_job_log(job.id, f"Audio synthesis job created for project {project.title}")
+
+    # 4. Schedule background task execution
+    background_tasks.add_task(
+        execute_audio_generation,
+        job_id=job.id,
+        project_id=project.id,
+        speed=payload.speed,
+        voice_id=target_voice_id,
+    )
+
+    return JobResponse.model_validate(job)

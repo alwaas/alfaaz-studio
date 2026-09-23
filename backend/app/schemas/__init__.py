@@ -1,5 +1,10 @@
 """Schemas module initialization."""
 
+from app.schemas.job import (
+    GenerateAudioRequest,
+    JobLogsResponse,
+    JobResponse,
+)
 from app.schemas.project import (
     AudioAssetResponse,
     ProjectCreate,
@@ -38,4 +43,7 @@ __all__ = [
     "ProjectUpdate",
     "AudioAssetResponse",
     "VideoAssetResponse",
+    "GenerateAudioRequest",
+    "JobResponse",
+    "JobLogsResponse",
 ]
