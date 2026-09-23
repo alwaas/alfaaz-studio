@@ -5,9 +5,9 @@ vertical 9:16 Instagram Reels (1080x1920) with authentic Nastaliq calligraphy,
 RTL formatting, drop shadows, and word-level kinetic highlight karaoke tags.
 """
 
-from collections.abc import Sequence
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Sequence
 
 from app.services.tts.provider import WordTimestamp
 
@@ -167,3 +167,4 @@ def generate_srt_content(verses: Sequence[SubtitleVerse]) -> str:
         lines.append(verse.text)
         lines.append("")
     return "\n".join(lines)
+

@@ -80,7 +80,6 @@ async def create_project(
     description="Retrieve all projects with optional status filtering.",
 )
 async def list_projects(
-    status_filter: Optional[str] = Query(None, alias="status", description="Filter by status"),
     status_filter: str | None = Query(None, alias="status", description="Filter by status"),
     limit: int = Query(50, ge=1, le=100),
     offset: int = Query(0, ge=0),

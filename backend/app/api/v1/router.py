@@ -16,6 +16,7 @@ api_v1_router.include_router(health_router)
 api_v1_router.include_router(system_router)
 api_v1_router.include_router(voices_router)
 api_v1_router.include_router(projects_router)
+
 api_v1_router.include_router(jobs_router)
 api_v1_router.include_router(audio_router)
 api_v1_router.include_router(rendering_router)

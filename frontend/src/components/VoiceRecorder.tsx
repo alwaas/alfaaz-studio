@@ -710,3 +710,4 @@ function encodeWavBlob(channelData: Float32Array, sampleRate: number): Blob {
 
   return new Blob([wavBuffer], { type: "audio/wav" });
 }
+

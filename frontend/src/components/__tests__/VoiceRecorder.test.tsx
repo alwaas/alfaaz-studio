@@ -52,3 +52,4 @@ describe("VoiceRecorder Component", () => {
     expect(mockOnClose).toHaveBeenCalled();
   });
 });
+

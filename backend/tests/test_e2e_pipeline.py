@@ -32,8 +32,7 @@ async def test_full_e2e_studio_pipeline(client: AsyncClient, db_session: AsyncSe
         engine="mock",
         language="ur",
         gender="male",
-        sample_rate=24000,
-        is_default=True,
+        is_preset=True,
     )
     db_session.add(voice)
     await db_session.commit()
