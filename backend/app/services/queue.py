@@ -2,6 +2,7 @@
 
 import asyncio
 from datetime import UTC, datetime
+from pathlib import Path
 from typing import Any
 
 from sqlalchemy import select
@@ -217,12 +218,35 @@ def celery_mix_audio(
     bgm_path: str | None = None,
 ) -> dict[str, Any]:
     """Celery chained task for mixing audio background and applying mastering filters."""
-    append_job_log(job_id, "Audio mixing task started in chain")
+    from app.services.dsp import audio_dsp
+
+    append_job_log(job_id, "Audio mixing and mastering DSP task started in chain")
+    file_path = prev_result.get("file_path") if isinstance(prev_result, dict) else None
+    mastered_path = None
+
+    if file_path and Path(file_path).is_file():
+        try:
+            import soundfile as sf  # type: ignore[import-untyped]
+
+            data, sr = sf.read(file_path, dtype="float32")
+            bgm_data = None
+            if bgm_path and Path(bgm_path).is_file():
+                bgm_raw, _ = sf.read(bgm_path, dtype="float32")
+                bgm_data = bgm_raw
+
+            mastered = audio_dsp.mix_and_master(data, bgm_data, sample_rate=sr)
+            mastered_path = str(file_path).replace(".wav", "_mastered.wav")
+            sf.write(mastered_path, mastered, sr, subtype="PCM_16")
+            append_job_log(job_id, f"Audio DSP mastering complete: {mastered_path}")
+        except Exception as exc:
+            append_job_log(job_id, f"Warning: DSP mastering encountered: {exc}")
+
     return {
         "status": "completed",
         "job_id": job_id,
         "step": "mix_audio",
         "prev_result": prev_result,
+        "mastered_file_path": mastered_path or file_path,
     }
 
 

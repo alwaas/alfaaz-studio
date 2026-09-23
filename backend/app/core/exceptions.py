@@ -34,3 +34,15 @@ class HardwareUnavailableException(AlfaazStudioException):
     """Exception raised when requested compute hardware is unreachable."""
 
     pass
+
+
+class AudioProcessingError(AlfaazStudioException):
+    """Exception raised during audio manipulation, DSP processing, or TTS synthesis."""
+
+    pass
+
+
+class ModelInferenceError(AlfaazStudioException):
+    """Exception raised during neural speech model execution."""
+
+    pass

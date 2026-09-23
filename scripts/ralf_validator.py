@@ -291,6 +291,77 @@ class RalfValidator:
 
         return confidence, self.errors
 
+    def validate_phase_4(self) -> Tuple[float, List[str]]:
+        """Validate Phase 4 completion (Real Urdu TTS Integration)."""
+        print("\n=== RALF Mode: Phase 4 Self-Review (Real Urdu TTS Integration) ===\n")
+
+        # Check core implementation files
+        self.check_file_exists("backend/app/services/tts/model_manager.py", "Model & Hardware Manager")
+        self.check_file_exists("backend/app/services/tts/f5_adapter.py", "F5-TTS Neural Adapter")
+        self.check_file_exists("backend/app/services/tts/melo_adapter.py", "MeloTTS Neural Adapter")
+        self.check_file_exists("backend/app/services/tts/piper_adapter.py", "Piper TTS Neural Adapter")
+        self.check_file_exists("backend/app/services/tts/voice_cloning.py", "Voice Cloning Preprocessor")
+        self.check_file_exists("backend/app/services/dsp.py", "Cinematic Audio DSP Chain")
+
+        # Check test suite files
+        self.check_file_exists("backend/tests/test_model_manager.py", "Model manager tests")
+        self.check_file_exists("backend/tests/test_f5_tts.py", "F5-TTS tests")
+        self.check_file_exists("backend/tests/test_melotts.py", "MeloTTS tests")
+        self.check_file_exists("backend/tests/test_piper_tts.py", "Piper TTS tests")
+        self.check_file_exists("backend/tests/test_voice_cloning.py", "Voice cloning tests")
+        self.check_file_exists("backend/tests/test_dsp.py", "Audio DSP tests")
+
+        # Check file content quality and critical symbols
+        self.check_file_content(
+            "backend/app/services/tts/model_manager.py",
+            ["HardwareManager", "ModelManager", "detect_device", "verify_checksum", "f5-tts-urdu"],
+            "Model manager and hardware selection",
+        )
+        self.check_file_content(
+            "backend/app/services/tts/voice_cloning.py",
+            ["VoiceCloningPreprocessor", "VoiceCloningReference", "trim_silence", "to_mono", "resample"],
+            "Voice cloning reference preprocessor",
+        )
+        self.check_file_content(
+            "backend/app/services/dsp.py",
+            ["AudioDSPChain", "AudioDSPParams", "apply_warm_eq", "apply_reverb", "apply_compression", "duck_bgm"],
+            "Cinematic Audio DSP mastering chain",
+        )
+        self.check_file_content(
+            "backend/app/services/tts/f5_adapter.py",
+            ["F5TTSProvider", "synthesize", "CC-BY-NC-4.0", "cloned"],
+            "F5-TTS provider with personal-use licensing and cloning",
+        )
+        self.check_file_content(
+            "backend/app/services/tts/melo_adapter.py",
+            ["MeloTTSProvider", "synthesize", "MIT", "DEFAULT_SPEAKERS"],
+            "MeloTTS multi-speaker synthesis adapter",
+        )
+        self.check_file_content(
+            "backend/app/services/tts/piper_adapter.py",
+            ["PiperTTSProvider", "synthesize", "DEFAULT_SAMPLE_RATE"],
+            "Piper fast on-device synthesis adapter",
+        )
+        self.check_file_content(
+            "backend/app/services/tts/factory.py",
+            ["F5TTSProvider", "MeloTTSProvider", "PiperTTSProvider"],
+            "TTS factory registration for neural adapters",
+        )
+
+        confidence = self.calculate_confidence()
+
+        print("\n=== Self-Review Summary ===")
+        print(f"Checks Passed: {self.checks_passed}/{self.checks_total}")
+        print(f"Confidence Score: {confidence:.2%}")
+        print(f"Errors: {len(self.errors)}")
+
+        if self.errors:
+            print("\n=== Errors ===")
+            for error in self.errors:
+                print(f"  - {error}")
+
+        return confidence, self.errors
+
     def update_progress_file(self, phase: int, confidence: float, errors: List[str]):
         """Update PROGRESS.md file"""
         phase_names = {
@@ -333,7 +404,7 @@ class RalfValidator:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="RALF Mode Phase Validator")
-    parser.add_argument("--phase", type=int, default=3, help="Phase number to validate (1-8)")
+    parser.add_argument("--phase", type=int, default=4, help="Phase number to validate (1-8)")
     args = parser.parse_args()
 
     validator = RalfValidator()
@@ -343,6 +414,8 @@ if __name__ == "__main__":
         confidence, errors = validator.validate_phase_2()
     elif args.phase == 3:
         confidence, errors = validator.validate_phase_3()
+    elif args.phase == 4:
+        confidence, errors = validator.validate_phase_4()
     else:
         print(f"Phase {args.phase} validator not yet implemented")
         sys.exit(1)

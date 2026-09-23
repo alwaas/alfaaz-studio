@@ -2,7 +2,10 @@
 
 from app.config import settings
 from app.core.logging import get_logger
+from app.services.tts.f5_adapter import F5TTSProvider
+from app.services.tts.melo_adapter import MeloTTSProvider
 from app.services.tts.mock_provider import MockTTSProvider
+from app.services.tts.piper_adapter import PiperTTSProvider
 from app.services.tts.provider import TTSProvider
 
 logger = get_logger(__name__)
@@ -17,7 +20,8 @@ class TTSProviderFactory:
     def get_provider(cls, engine_name: str | None = None) -> TTSProvider:
         """
         Retrieve or instantiate a TTS provider matching engine_name.
-        Falls back to MockTTSProvider if requested engine is unavailable.
+        Supported engines: 'mock', 'f5-tts', 'melotts', 'piper'.
+        Falls back to MockTTSProvider if requested engine is unknown.
         """
         engine = (engine_name or settings.DEFAULT_TTS_ENGINE).lower()
 
@@ -29,12 +33,15 @@ class TTSProviderFactory:
         match engine:
             case "mock":
                 provider = MockTTSProvider(default_sample_rate=settings.SAMPLE_RATE)
-            case "f5-tts" | "melotts" | "piper":
-                # In Phase 3, default neural adapters fall back gracefully to MockTTSProvider
-                logger.info(
-                    f"TTS engine '{engine}' requested; utilizing MockTTSProvider harness for Phase 3"
-                )
-                provider = MockTTSProvider(default_sample_rate=settings.SAMPLE_RATE)
+            case "f5-tts" | "f5_tts" | "f5":
+                logger.info("Initializing F5TTSProvider adapter")
+                provider = F5TTSProvider()
+            case "melotts" | "melo_tts" | "melo":
+                logger.info("Initializing MeloTTSProvider adapter")
+                provider = MeloTTSProvider()
+            case "piper" | "piper_tts":
+                logger.info("Initializing PiperTTSProvider adapter")
+                provider = PiperTTSProvider()
             case _:
                 logger.warning(f"Unknown TTS engine '{engine}'; falling back to MockTTSProvider")
                 provider = MockTTSProvider(default_sample_rate=settings.SAMPLE_RATE)
