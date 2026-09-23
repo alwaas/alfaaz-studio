@@ -121,9 +121,6 @@ export function PoetryEditor({
           <h2 className="text-base font-semibold text-studio-text">
             Urdu Poetry Stanza
           </h2>
-          <span className="font-nastaliq text-studio-muted text-sm pr-1">
-            (متن کلام)
-          </span>
         </div>
 
         {/* Presets Picker */}
@@ -146,26 +143,26 @@ export function PoetryEditor({
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-4">
         <div>
           <label className="block text-xs font-medium text-studio-muted mb-1.5">
-            Project Title / عنوان
+            Project Title
           </label>
           <input
             type="text"
             value={title}
             onChange={(e) => onChangeTitle(e.target.value)}
-            placeholder="مثال: دل ناداں"
+            placeholder="e.g., Dil-e-Nadaan"
             className="w-full px-3.5 py-2 rounded-xl bg-studio-surface border border-studio-border text-sm text-studio-text focus:outline-none focus:border-studio-gold transition-colors"
           />
         </div>
 
         <div>
           <label className="block text-xs font-medium text-studio-muted mb-1.5">
-            Poet / شاعر
+            Poet Name
           </label>
           <input
             type="text"
             value={poetName}
             onChange={(e) => onChangePoetName(e.target.value)}
-            placeholder="مثال: مرزا غالب"
+            placeholder="e.g., Mirza Ghalib"
             className="w-full px-3.5 py-2 rounded-xl bg-studio-surface border border-studio-border text-sm text-studio-text focus:outline-none focus:border-studio-gold transition-colors"
           />
         </div>
@@ -174,7 +171,7 @@ export function PoetryEditor({
       {/* Diacritics (Aerab) Toolbar */}
       <div className="mb-3 p-2 rounded-xl bg-studio-surface border border-studio-border/60 flex items-center gap-1.5 overflow-x-auto">
         <span className="text-[11px] font-medium text-studio-muted px-2 shrink-0">
-          Aerab (اعراب):
+          Aerab (Diacritics):
         </span>
         {URDU_DIACRITICS.map((item) => (
           <button
@@ -217,19 +214,19 @@ export function PoetryEditor({
       <div className="mt-4 pt-3 border-t border-studio-border flex items-center justify-between text-xs text-studio-muted">
         <div className="flex items-center gap-4">
           <span>
-            Verses (مصرعے):{" "}
+            Verses:{" "}
             <strong className="text-studio-text font-semibold">
               {lines.length}
             </strong>
           </span>
           <span>
-            Couplets (اشعار):{" "}
+            Couplets:{" "}
             <strong className="text-studio-text font-semibold">
               {coupletCount}
             </strong>
           </span>
           <span>
-            Words (الفاظ):{" "}
+            Words:{" "}
             <strong className="text-studio-text font-semibold">
               {words.length}
             </strong>

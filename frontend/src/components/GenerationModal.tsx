@@ -137,7 +137,7 @@ export function GenerationModal({
         <div className="rounded-xl bg-black/60 border border-studio-border/70 p-3 my-4">
           <div className="flex items-center gap-2 pb-2 mb-2 border-b border-white/10 text-[11px] text-studio-muted">
             <Terminal className="w-3.5 h-3.5 text-studio-gold" />
-            <span>Worker Execution Logs (ریئل ٹائم لاگز)</span>
+            <span>Worker Execution Logs</span>
           </div>
 
           <div

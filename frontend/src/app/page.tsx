@@ -188,7 +188,6 @@ export default function StudioHomePage() {
         >
           <Edit3 className="w-3.5 h-3.5" />
           <span>1. Poetry & Voice Setup</span>
-          <span className="font-nastaliq text-xs ml-1">(کلام اور آواز)</span>
         </button>
 
         <button
@@ -202,7 +201,6 @@ export default function StudioHomePage() {
         >
           <SlidersHorizontal className="w-3.5 h-3.5" />
           <span>2. Audio Editor & Mastering</span>
-          <span className="font-nastaliq text-xs ml-1">(صوتی ایڈیٹر)</span>
           {activeAssetId && (
             <span className="w-2 h-2 rounded-full bg-studio-emerald animate-pulse" />
           )}
@@ -219,7 +217,6 @@ export default function StudioHomePage() {
         >
           <Film className="w-3.5 h-3.5" />
           <span>3. Reel Video Preview & Export</span>
-          <span className="font-nastaliq text-xs ml-1">(ریل ویڈیو)</span>
           {activeVideoUrl && (
             <span className="w-2 h-2 rounded-full bg-studio-emerald animate-pulse" />
           )}
@@ -283,7 +280,6 @@ export default function StudioHomePage() {
             >
               <Wand2 className="w-5 h-5" />
               <span>Generate Neural Voice-over</span>
-              <span className="font-nastaliq text-lg font-bold pr-1">(آواز تیار کریں)</span>
             </button>
           </div>
         </div>

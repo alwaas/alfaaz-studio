@@ -30,31 +30,31 @@ interface AudioEditorProps {
 const DEFAULT_BGM_PRESETS: BGMPreset[] = [
   {
     id: "none",
-    name: "None (Acapella / تنہا آواز)",
+    name: "None (Acapella)",
     category: "none",
     description: "Pure vocal without instrumental accompaniment",
   },
   {
     id: "rubab-meditative",
-    name: "Rubab Meditative (مراقبہ رباب)",
+    name: "Rubab Meditative",
     category: "acoustic",
     description: "Gentle Afghan/Pashto rubab plucks with warm low-mids",
   },
   {
     id: "sitar-twilight",
-    name: "Sitar Twilight (شامِ ستار)",
+    name: "Sitar Twilight",
     category: "classical",
     description: "Atmospheric evening ragas with gentle resonance",
   },
   {
     id: "flute-melancholy",
-    name: "Bansuri Flute (بانسری درد)",
+    name: "Bansuri Flute",
     category: "wind",
     description: "Soulful wooden flute melodies for melancholic couplets",
   },
   {
     id: "lofi-rain",
-    name: "Lo-Fi Rain & Vinyl (بارش اور دھیمی دھن)",
+    name: "Lo-Fi Rain & Vinyl",
     category: "modern",
     description: "Cozy vinyl crackle and ambient rain drops for modern reels",
   },
@@ -457,7 +457,7 @@ export function AudioEditor({
         {poetryVerses.length > 0 && (
           <div className="pt-3 border-t border-studio-border/60">
             <div className="text-[11px] font-semibold text-studio-muted uppercase tracking-wider mb-2">
-              Poetry Stanza Markers (شعر پر جائیں)
+              Poetry Stanza Markers
             </div>
             <div className="flex flex-wrap gap-2">
               {poetryVerses.map((verse, idx) => (
@@ -494,7 +494,7 @@ export function AudioEditor({
           {/* Warmth EQ */}
           <div>
             <div className="flex justify-between text-xs text-studio-text mb-1">
-              <span>Warmth (بیس کی گہرائی)</span>
+              <span>Warmth</span>
               <span className="font-mono text-studio-gold">+{settings.warmth_db} dB</span>
             </div>
             <input
@@ -516,7 +516,7 @@ export function AudioEditor({
           {/* Air EQ */}
           <div>
             <div className="flex justify-between text-xs text-studio-text mb-1">
-              <span>Air & Breath (شائستگی)</span>
+              <span>Air & Breath</span>
               <span className="font-mono text-studio-gold">+{settings.air_db} dB</span>
             </div>
             <input
@@ -546,7 +546,7 @@ export function AudioEditor({
           {/* Reverb Wet Mix */}
           <div>
             <div className="flex justify-between text-xs text-studio-text mb-1">
-              <span>Reverb Wet Mix (مشاعرہ گونج)</span>
+              <span>Reverb Wet Mix</span>
               <span className="font-mono text-studio-gold">
                 {Math.round(settings.reverb_wet * 100)}%
               </span>
@@ -570,7 +570,7 @@ export function AudioEditor({
           {/* Room Size */}
           <div>
             <div className="flex justify-between text-xs text-studio-text mb-1">
-              <span>Room Scale (ہال کی وسعت)</span>
+              <span>Room Scale</span>
               <span className="font-mono text-studio-gold">
                 {Math.round(settings.room_size * 100)}%
               </span>
@@ -593,7 +593,7 @@ export function AudioEditor({
         <div className="p-5 rounded-2xl bg-studio-surface border border-studio-border space-y-4">
           <div className="flex items-center gap-2 text-xs font-bold text-studio-gold uppercase tracking-wider">
             <Music2 className="w-3.5 h-3.5" />
-            <span>Background Music (پس پردہ ساز)</span>
+            <span>Background Music</span>
           </div>
 
           <div>
@@ -742,9 +742,6 @@ export function AudioEditor({
         <Sparkles className="w-4 h-4" />
         <span>
           {isProcessing ? "Rendering DSP Master..." : "Apply DSP Mastering Chain"}
-        </span>
-        <span className="font-nastaliq text-base font-bold pr-1">
-          (ماسٹرنگ لاگو کریں)
         </span>
       </button>
     </div>

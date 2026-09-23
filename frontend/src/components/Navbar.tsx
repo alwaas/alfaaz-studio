@@ -18,9 +18,6 @@ export function Navbar() {
               <span className="text-lg font-bold tracking-tight text-studio-text">
                 AlfaazStudio
               </span>
-              <span className="font-nastaliq text-studio-gold text-lg font-bold">
-                الفاظ اسٹوڈیو
-              </span>
             </div>
             <p className="text-[10px] text-studio-muted tracking-wider uppercase font-semibold">
               Urdu Poetry AI Voice-over Studio

@@ -27,7 +27,7 @@ describe("PoetryEditor Component", () => {
     ).toBeDefined();
 
     // Verify verse count
-    expect(screen.getByText("Verses (مصرعے):")).toBeDefined();
+    expect(screen.getByText("Verses:")).toBeDefined();
   });
 
   it("inserts diacritics when aerab buttons are clicked", () => {

@@ -61,7 +61,7 @@ describe("ReelPreview Component", () => {
 
     expect(screen.getByText("1080x1920 Vertical Feed Preview")).toBeDefined();
     expect(screen.getByText("دیوان غالب")).toBeDefined();
-    expect(screen.getByText("مرزا غالب")).toBeDefined();
+    expect(screen.getAllByText(/مرزا غالب/).length).toBeGreaterThan(0);
     expect(screen.getByText(/دل ناداں تجھے ہوا کیا ہے/)).toBeDefined();
     expect(screen.getByText("Nastaliq Subtitle Typography")).toBeDefined();
   });

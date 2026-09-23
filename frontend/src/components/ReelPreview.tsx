@@ -30,28 +30,28 @@ interface ReelPreviewProps {
 const DEFAULT_THEMES: ReelThemePreset[] = [
   {
     id: "velvet-gold",
-    name: "Velvet & Gold (شاہانہ مخمل و زر)",
+    name: "Velvet & Gold",
     description: "Deep midnight navy with royal gold calligraphy accents",
     bg_color_hex: "0x080B14",
     accent_color_hex: "0xF59E0B",
   },
   {
     id: "emerald-night",
-    name: "Mughal Emerald (مغلیہ زمرد)",
+    name: "Mughal Emerald",
     description: "Rich atmospheric jade-emerald for soulful classic ghazals",
     bg_color_hex: "0x06140E",
     accent_color_hex: "0x10B981",
   },
   {
     id: "candlelight",
-    name: "Candlelit Amber (شمع و محفل)",
+    name: "Candlelit Amber",
     description: "Warm incandescent sepia and dark charcoal for romantic verses",
     bg_color_hex: "0x140B07",
     accent_color_hex: "0xFB923C",
   },
   {
     id: "monochrome-rain",
-    name: "Noir Rain (سیاہ و سفید بارش)",
+    name: "Noir Rain",
     description: "Moody high-contrast slate for melancholic modern couplets",
     bg_color_hex: "0x0A0C10",
     accent_color_hex: "0x94A3B8",
@@ -258,11 +258,11 @@ export function ReelPreview({
                       color: `#${activeTheme.accent_color_hex.replace("0x", "")}`,
                     }}
                   >
-                    {title || "الفاظ اسٹوڈیو"}
+                    {title || "AlfaazStudio"}
                   </div>
                   {poetName && (
                     <div className="font-nastaliq text-xs text-white/80 mt-1">
-                      شاعر: {poetName}
+                      Poet: {poetName}
                     </div>
                   )}
                 </div>
@@ -344,7 +344,7 @@ export function ReelPreview({
             {/* Font Size Slider */}
             <div>
               <div className="flex justify-between text-xs text-studio-text mb-1">
-                <span>Calligraphy Scale (فونٹ کا سائز)</span>
+                <span>Calligraphy Scale</span>
                 <span className="font-mono text-studio-gold">{fontSize} pt</span>
               </div>
               <input
@@ -409,9 +409,6 @@ export function ReelPreview({
               {isRendering
                 ? "Rendering 1080x1920 MP4 Video..."
                 : "Render 9:16 Vertical Reel (MP4)"}
-            </span>
-            <span className="font-nastaliq text-base font-bold pr-1">
-              (ریل ویڈیو تیار کریں)
             </span>
           </button>
         </div>
