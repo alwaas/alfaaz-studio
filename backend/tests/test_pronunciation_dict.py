@@ -1,5 +1,6 @@
 """Unit tests for Urdu Pronunciation Dictionary system."""
 
+import pytest
 from app.utils.urdu_text import PronunciationDictionary, pronunciation_dict
 
 
@@ -38,3 +39,4 @@ def test_empty_and_whitespace_input() -> None:
     assert custom_dict.apply("") == ""
     assert custom_dict.apply("   ") == "   "
     assert custom_dict.apply("شعر") == "شِعر"
+

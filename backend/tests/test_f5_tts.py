@@ -1,8 +1,8 @@
 """Unit tests for F5-TTS Neural Speech Synthesis Adapter."""
 
-import tempfile
+import io
 from pathlib import Path
-
+import tempfile
 import numpy as np
 import pytest
 import soundfile as sf  # type: ignore[import-untyped]
@@ -102,3 +102,4 @@ def test_f5_factory_resolution() -> None:
     tts_factory.clear_cache()
     provider = tts_factory.get_provider("f5-tts")
     assert isinstance(provider, F5TTSProvider)
+

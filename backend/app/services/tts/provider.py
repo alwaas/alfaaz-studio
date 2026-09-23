@@ -1,13 +1,12 @@
 """TTS Provider Protocol and Result Data Structures."""
 
 from dataclasses import dataclass, field
-from typing import Any, Protocol, runtime_checkable
+from typing import Any, Optional, Protocol, runtime_checkable
 
 
 @dataclass
 class WordTimestamp:
     """Timestamp alignment for a single spoken word."""
-
     word: str
     start_time: float
     end_time: float
@@ -25,7 +24,6 @@ class WordTimestamp:
 @dataclass
 class TTSResult:
     """Output structure returned by any TTS provider implementation."""
-
     audio_bytes: bytes
     sample_rate: int
     duration: float
@@ -40,10 +38,10 @@ class TTSProvider(Protocol):
     async def synthesize(
         self,
         text: str,
-        voice: str | None = None,
+        voice: Optional[str] = None,
         speed: float = 1.0,
         pitch: float = 0.0,
-        reference_audio: str | None = None,
+        reference_audio: Optional[str] = None,
         **kwargs: Any,
     ) -> TTSResult:
         """
@@ -57,3 +55,4 @@ class TTSProvider(Protocol):
         :return: TTSResult containing WAV bytes and alignment metadata.
         """
         ...
+

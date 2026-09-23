@@ -1,12 +1,11 @@
 """Mock TTS Provider implementation generating harmonic audio and synthetic alignments."""
 
 import io
-from typing import Any
-
+import math
+from typing import Any, Optional
 import numpy as np
 import soundfile as sf  # type: ignore[import-untyped]
-
-from app.services.tts.provider import TTSResult, WordTimestamp
+from app.services.tts.provider import TTSProvider, TTSResult, WordTimestamp
 
 
 class MockTTSProvider:
@@ -89,7 +88,11 @@ class MockTTSProvider:
         for i, word in enumerate(words):
             start_time = current_time
             # 85% of slot is speech, 15% is inter-word acoustic micro-pause
-            end_time = start_time + (slot_duration * 0.85) if i < word_count - 1 else total_duration
+            end_time = (
+                start_time + (slot_duration * 0.85)
+                if i < word_count - 1
+                else total_duration
+            )
             timestamps.append(
                 WordTimestamp(
                     word=word,
@@ -105,11 +108,11 @@ class MockTTSProvider:
     async def synthesize(
         self,
         text: str,
-        voice: str | None = None,
+        voice: Optional[str] = None,
         speed: float = 1.0,
         pitch: float = 0.0,
-        reference_audio: str | None = None,
-        duration: float | None = None,
+        reference_audio: Optional[str] = None,
+        duration: Optional[float] = None,
         **kwargs: Any,
     ) -> TTSResult:
         """Synthesize Urdu text into deterministic mock WAV audio."""

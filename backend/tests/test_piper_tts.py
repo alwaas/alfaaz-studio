@@ -50,3 +50,4 @@ def test_piper_factory_resolution() -> None:
     tts_factory.clear_cache()
     provider = tts_factory.get_provider("piper")
     assert isinstance(provider, PiperTTSProvider)
+

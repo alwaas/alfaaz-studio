@@ -1,8 +1,8 @@
 """Unit tests for Voice Cloning Audio Preprocessor."""
 
-import tempfile
+import io
 from pathlib import Path
-
+import tempfile
 import numpy as np
 import pytest
 import soundfile as sf  # type: ignore[import-untyped]
@@ -119,3 +119,4 @@ def test_duration_boundary_errors() -> None:
             voice_preprocessor.preprocess(tmp_path, min_duration=1.0)
     finally:
         tmp_path.unlink(missing_ok=True)
+

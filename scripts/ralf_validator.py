@@ -362,6 +362,82 @@ class RalfValidator:
 
         return confidence, self.errors
 
+    def validate_phase_5(self) -> Tuple[float, List[str]]:
+        """Validate Phase 5 completion (Frontend Foundation & RTL Typography)."""
+        print("\n=== RALF Mode: Phase 5 Self-Review (Frontend Foundation) ===\n")
+
+        # Check directories
+        self.check_directory_exists("frontend/src/app", "Next.js App Router directory")
+        self.check_directory_exists("frontend/src/components", "Frontend components directory")
+        self.check_directory_exists("frontend/src/services", "Frontend services directory")
+
+        # Check configuration files
+        self.check_file_exists("frontend/package.json", "Frontend package.json")
+        self.check_file_exists("frontend/tsconfig.json", "Frontend tsconfig.json")
+        self.check_file_exists("frontend/tailwind.config.ts", "Tailwind CSS configuration")
+        self.check_file_exists("frontend/next.config.js", "Next.js configuration")
+
+        # Check app core files
+        self.check_file_exists("frontend/src/app/globals.css", "Global styles & Nastaliq fonts")
+        self.check_file_exists("frontend/src/app/layout.tsx", "Root layout component")
+        self.check_file_exists("frontend/src/app/page.tsx", "Main studio page")
+        self.check_file_exists("frontend/src/types/index.ts", "Frontend TypeScript interfaces")
+        self.check_file_exists("frontend/src/services/api.ts", "Frontend API client")
+
+        # Check components
+        self.check_file_exists("frontend/src/components/Navbar.tsx", "Navbar component")
+        self.check_file_exists("frontend/src/components/HardwareBadge.tsx", "Hardware telemetry badge")
+        self.check_file_exists("frontend/src/components/PoetryEditor.tsx", "Poetry editor component")
+        self.check_file_exists("frontend/src/components/VoiceSelector.tsx", "Voice selector component")
+        self.check_file_exists("frontend/src/components/GenerationModal.tsx", "Generation modal component")
+
+        # Check test suite files
+        self.check_file_exists("frontend/vitest.config.ts", "Vitest configuration")
+        self.check_file_exists("frontend/src/components/__tests__/PoetryEditor.test.tsx", "Poetry editor tests")
+        self.check_file_exists("frontend/src/components/__tests__/VoiceSelector.test.tsx", "Voice selector tests")
+        self.check_file_exists("frontend/src/services/__tests__/api.test.ts", "API client tests")
+
+        # Check file content quality and critical symbols
+        self.check_file_content(
+            "frontend/src/app/globals.css",
+            ["urdu-text", "Noto Nastaliq Urdu", "Gulzar"],
+            "RTL typography and Nastaliq fonts in globals.css",
+        )
+        self.check_file_content(
+            "frontend/tailwind.config.ts",
+            ["nastaliq", "studio"],
+            "Nastaliq font family and studio theme in tailwind.config.ts",
+        )
+        self.check_file_content(
+            "frontend/src/components/PoetryEditor.tsx",
+            ["URDU_DIACRITICS", "POETRY_PRESETS", "insertDiacritic", "urdu-text"],
+            "Urdu diacritics and Nastaliq editor in PoetryEditor.tsx",
+        )
+        self.check_file_content(
+            "frontend/src/components/VoiceSelector.tsx",
+            ["f5-tts", "melotts", "piper", "referenceFile"],
+            "Multi-engine selection and voice cloning in VoiceSelector.tsx",
+        )
+        self.check_file_content(
+            "frontend/src/services/api.ts",
+            ["generateAudio", "getDeviceTelemetry", "getJob", "createProject"],
+            "Typed API client methods in api.ts",
+        )
+
+        confidence = self.calculate_confidence()
+
+        print("\n=== Self-Review Summary ===")
+        print(f"Checks Passed: {self.checks_passed}/{self.checks_total}")
+        print(f"Confidence Score: {confidence:.2%}")
+        print(f"Errors: {len(self.errors)}")
+
+        if self.errors:
+            print("\n=== Errors ===")
+            for error in self.errors:
+                print(f"  - {error}")
+
+        return confidence, self.errors
+
     def update_progress_file(self, phase: int, confidence: float, errors: List[str]):
         """Update PROGRESS.md file"""
         phase_names = {
@@ -404,7 +480,7 @@ class RalfValidator:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="RALF Mode Phase Validator")
-    parser.add_argument("--phase", type=int, default=4, help="Phase number to validate (1-8)")
+    parser.add_argument("--phase", type=int, default=5, help="Phase number to validate (1-8)")
     args = parser.parse_args()
 
     validator = RalfValidator()
@@ -416,6 +492,8 @@ if __name__ == "__main__":
         confidence, errors = validator.validate_phase_3()
     elif args.phase == 4:
         confidence, errors = validator.validate_phase_4()
+    elif args.phase == 5:
+        confidence, errors = validator.validate_phase_5()
     else:
         print(f"Phase {args.phase} validator not yet implemented")
         sys.exit(1)

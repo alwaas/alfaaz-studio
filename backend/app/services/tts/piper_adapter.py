@@ -117,9 +117,7 @@ class PiperTTSProvider(TTSProvider):
         base_word_duration = 0.35 / speed
         pause_duration = 0.05 / speed
 
-        total_duration = (len(words) * base_word_duration) + (
-            max(0, len(words) - 1) * pause_duration
-        )
+        total_duration = (len(words) * base_word_duration) + (max(0, len(words) - 1) * pause_duration)
         total_samples = int(total_duration * sr)
         t = np.linspace(0.0, total_duration, total_samples, endpoint=False)
 
@@ -174,3 +172,4 @@ class PiperTTSProvider(TTSProvider):
                 )
             )
         return timestamps
+

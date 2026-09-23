@@ -63,3 +63,4 @@ def test_melotts_factory_resolution() -> None:
     tts_factory.clear_cache()
     provider = tts_factory.get_provider("melotts")
     assert isinstance(provider, MeloTTSProvider)
+

@@ -8,9 +8,9 @@ Implements studio-grade audio effects:
 - Loudness Normalization (-1.0 dBFS peak ceiling, -14.0 LUFS target)
 """
 
+from dataclasses import dataclass
 import io
 import math
-from dataclasses import dataclass
 
 import numpy as np
 import scipy.signal  # type: ignore[import-untyped]
@@ -283,7 +283,9 @@ class AudioDSPChain:
         return (bgm_processed * smooth_gains[:, None]).astype(np.float32)
 
     @staticmethod
-    def normalize_loudness(audio: np.ndarray, target_peak_db: float = -1.0) -> np.ndarray:
+    def normalize_loudness(
+        audio: np.ndarray, target_peak_db: float = -1.0
+    ) -> np.ndarray:
         """Limits peak to target_peak_db ceiling to prevent digital clipping."""
         if len(audio) == 0:
             return audio
@@ -389,3 +391,4 @@ class AudioDSPChain:
 
 
 audio_dsp = AudioDSPChain()
+

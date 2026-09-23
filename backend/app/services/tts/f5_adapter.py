@@ -160,9 +160,7 @@ class F5TTSProvider(TTSProvider):
         base_word_duration = 0.42 / speed
         pause_duration = 0.08 / speed
 
-        total_duration = (len(words) * base_word_duration) + (
-            max(0, len(words) - 1) * pause_duration
-        )
+        total_duration = (len(words) * base_word_duration) + (max(0, len(words) - 1) * pause_duration)
         total_samples = int(total_duration * sr)
         t = np.linspace(0.0, total_duration, total_samples, endpoint=False)
 
@@ -234,3 +232,4 @@ class F5TTSProvider(TTSProvider):
                 )
             )
         return timestamps
+

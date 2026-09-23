@@ -1,5 +1,6 @@
 """Unit tests for Urdu text normalization and poetic structure parsing."""
 
+import pytest
 from app.utils.urdu_text import (
     URDU_COMMA,
     URDU_KHATMA,
@@ -98,3 +99,4 @@ def test_split_couplets() -> None:
     assert len(odd_couplets) == 2
     assert odd_couplets[1][0] == "مصرع سوم"
     assert odd_couplets[1][1] == ""
+

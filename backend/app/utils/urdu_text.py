@@ -2,49 +2,50 @@
 
 import re
 import unicodedata
+from typing import Optional
 
 # Standard Urdu punctuation marks
-URDU_KHATMA = "\u06d4"  # ۔ (Urdu Full Stop / Khatma)
-URDU_QUESTION = "\u061f"  # ؟ (Urdu Question Mark)
-URDU_COMMA = "\u060c"  # ، (Urdu Comma)
-EXCLAMATION = "!"  # !
+URDU_KHATMA = "\u06D4"      # ۔ (Urdu Full Stop / Khatma)
+URDU_QUESTION = "\u061F"    # ؟ (Urdu Question Mark)
+URDU_COMMA = "\u060C"       # ، (Urdu Comma)
+EXCLAMATION = "!"           # !
 
 URDU_PUNCTUATION = {URDU_KHATMA, URDU_QUESTION, URDU_COMMA, EXCLAMATION}
 
 # Character replacement maps for standardizing Urdu Unicode
 URDU_CHAR_MAP: dict[str, str] = {
-    "\u0643": "\u06a9",  # Arabic Kaf ك -> Urdu Kaf ک
-    "\u0649": "\u06cc",  # Arabic Alef Maksura ى -> Urdu Choti Yeh ی
-    "\u064a": "\u06cc",  # Arabic Yeh ي -> Urdu Choti Yeh ی
-    "\u06c2": "\u06c1\u0654",  # Heh Goal with Hamza
-    "\u06c3": "\u06c1\u0654",  # Teh Marbuta Goal
-    "\u0629": "\u06c1",  # Arabic Teh Marbuta ة -> Urdu Heh ہ
-    "\u0640": "",  # Kashida / Tatweel (elongation) -> remove
+    "\u0643": "\u06A9",  # Arabic Kaf ك -> Urdu Kaf ک
+    "\u0649": "\u06CC",  # Arabic Alef Maksura ى -> Urdu Choti Yeh ی
+    "\u064A": "\u06CC",  # Arabic Yeh ي -> Urdu Choti Yeh ی
+    "\u06C2": "\u06C1\u0654",  # Heh Goal with Hamza
+    "\u06C3": "\u06C1\u0654",  # Teh Marbuta Goal
+    "\u0629": "\u06C1",  # Arabic Teh Marbuta ة -> Urdu Heh ہ
+    "\u0640": "",        # Kashida / Tatweel (elongation) -> remove
 }
 
 # Standard dictionary mapping words to phonetically explicit Aerab-annotated equivalents
 DEFAULT_PRONUNCIATION_DICT: dict[str, str] = {
-    "دل": "دِل",  # Dil
-    "گل": "گُل",  # Gul
-    "عشق": "عِشق",  # Ishq
-    "شعر": "شِعر",  # She'r
-    "محبت": "مَحَبَّت",  # Mohabbat
-    "غالب": "غالِب",  # Ghalib
-    "اقبال": "اِقبال",  # Iqbal
-    "شاعری": "شاعِری",  # Sha'iri
-    "خواب": "خواHome",  # Khwab (silent wao)
+    "دل": "دِل",        # Dil
+    "گل": "گُل",        # Gul
+    "عشق": "عِشق",      # Ishq
+    "شعر": "شِعر",      # She'r
+    "محبت": "مَحَبَّت",   # Mohabbat
+    "غالب": "غالِب",    # Ghalib
+    "اقبال": "اِقبال",   # Iqbal
+    "شاعری": "شاعِری",   # Sha'iri
+    "خواب": "خواHome", # Khwab (silent wao)
     "خواہش": "خواہِش",  # Khwahish
-    "وفا": "وَفا",  # Wafa
-    "ستم": "سِتَم",  # Sitam
-    "نگاہ": "نِگاہ",  # Nigah
-    "چمن": "چَمَن",  # Chaman
+    "وفا": "وَفا",       # Wafa
+    "ستم": "سِتَم",      # Sitam
+    "نگاہ": "نِگاہ",     # Nigah
+    "چمن": "چَمَن",     # Chaman
 }
 
 
 class PronunciationDictionary:
     """Manager for Urdu phonetic and aerab pronunciation mappings."""
 
-    def __init__(self, custom_dict: dict[str, str] | None = None) -> None:
+    def __init__(self, custom_dict: Optional[dict[str, str]] = None) -> None:
         self.dictionary: dict[str, str] = dict(DEFAULT_PRONUNCIATION_DICT)
         if custom_dict:
             self.dictionary.update(custom_dict)
@@ -130,7 +131,8 @@ class UrduTextNormalizer:
         if preserve_newlines:
             lines = cleaned.splitlines()
             cleaned_lines = [
-                UrduTextNormalizer.normalize_punctuation(line.strip()) for line in lines
+                UrduTextNormalizer.normalize_punctuation(line.strip())
+                for line in lines
             ]
             # Collapse more than two consecutive empty lines
             result = "\n".join(cleaned_lines)
@@ -169,3 +171,4 @@ class UrduTextNormalizer:
 normalize_urdu = UrduTextNormalizer.clean_text
 split_verses = UrduTextNormalizer.split_verses
 split_couplets = UrduTextNormalizer.split_couplets
+

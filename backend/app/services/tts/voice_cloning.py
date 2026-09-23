@@ -8,9 +8,9 @@ Performs reference audio preparation for zero-shot voice cloning (F5-TTS, etc.):
 - Duration constraint enforcement (3s-15s recommended optimal reference length)
 """
 
+from dataclasses import dataclass
 import io
 import math
-from dataclasses import dataclass
 from pathlib import Path
 
 import numpy as np
@@ -126,9 +126,7 @@ class VoiceCloningPreprocessor:
             return audio
 
         first_speech_sample = max(0, speech_indices[0] * hop_len - pad_samples)
-        last_speech_sample = min(
-            len(audio), (speech_indices[-1] * hop_len + frame_len) + pad_samples
-        )
+        last_speech_sample = min(len(audio), (speech_indices[-1] * hop_len + frame_len) + pad_samples)
 
         return audio[first_speech_sample:last_speech_sample]
 
@@ -192,3 +190,4 @@ class VoiceCloningPreprocessor:
 
 
 voice_preprocessor = VoiceCloningPreprocessor()
+

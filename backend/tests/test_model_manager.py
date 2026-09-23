@@ -1,11 +1,13 @@
 """Unit tests for ModelManager and HardwareManager."""
 
-import tempfile
 from pathlib import Path
+import tempfile
+import pytest
 
 from app.services.tts.model_manager import (
     HardwareManager,
     ModelManager,
+    ModelMetadata,
 )
 
 
@@ -105,3 +107,4 @@ def test_model_cache_and_oom_recovery() -> None:
     # Test cache clearing
     mm.clear_cache()
     assert len(mm._cache) == 0
+

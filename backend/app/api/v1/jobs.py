@@ -3,7 +3,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-
 from app.db.models import Job
 from app.db.session import get_db
 from app.schemas.job import JobLogsResponse, JobResponse
@@ -92,3 +91,4 @@ async def get_job_execution_logs(
 
     logs = get_job_logs(job_id)
     return JobLogsResponse(job_id=job_id, status=job.status, logs=logs)
+
