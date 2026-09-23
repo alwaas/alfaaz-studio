@@ -4,9 +4,8 @@ import pytest
 from httpx import AsyncClient
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-
-from app.db.models import Job, VoiceProfile
-from app.services.queue import create_task_chain
+from app.db.models import Job, Project, VoiceProfile
+from app.services.queue import create_task_chain, get_job_logs
 
 
 @pytest.mark.asyncio

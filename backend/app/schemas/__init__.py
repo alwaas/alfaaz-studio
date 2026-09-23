@@ -44,14 +44,18 @@ __all__ = [
     "DeviceInfoResponse",
     "ModelStatusResponse",
     "ModelItem",
+    "ModelStatusResponse",
     "StorageStatusResponse",
     "StorageLocationInfo",
+    "StorageStatusResponse",
     "VoiceProfileCreate",
     "VoiceProfileUpdate",
     "VoiceProfileResponse",
+    "VoiceProfileUpdate",
     "ProjectCreate",
     "ProjectUpdate",
     "ProjectResponse",
+    "ProjectUpdate",
     "AudioAssetResponse",
     "VideoAssetResponse",
     "GenerateAudioRequest",
@@ -65,3 +69,4 @@ __all__ = [
     "ReelRenderRequest",
     "ReelRenderResponse",
 ]
+

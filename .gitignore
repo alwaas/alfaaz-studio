@@ -54,11 +54,13 @@ models/*
 !models/.gitkeep
 outputs/*
 !outputs/.gitkeep
+!outputs/sample_ghalib_reel.mp4
 temp/*
 !temp/.gitkeep
 *.wav
 *.mp3
 *.mp4
+!outputs/sample_ghalib_reel.mp4
 *.ass
 *.zip
 

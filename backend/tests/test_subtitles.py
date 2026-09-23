@@ -131,3 +131,4 @@ def test_srt_generation() -> None:
     srt = generate_srt_content(verses)
     assert "1\n00:00:01,000 --> 00:00:03,500\nپہلا مصرع" in srt
     assert "2\n00:00:03,800 --> 00:00:06,000\nدوسرا مصرع" in srt
+

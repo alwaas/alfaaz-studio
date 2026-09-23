@@ -5,10 +5,12 @@ burned-in ASS Nastaliq subtitles into cinematic 1080x1920 Instagram Reels.
 """
 
 import asyncio
+import os
 import shutil
 import tempfile
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 
 from app.core.exceptions import AudioProcessingError
 from app.services.subtitles import ASSSubtitleBuilder, SubtitleVerse
@@ -242,3 +244,4 @@ class ReelRenderer:
 
 # Singleton renderer instance
 reel_renderer = ReelRenderer()
+

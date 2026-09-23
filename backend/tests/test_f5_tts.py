@@ -1,8 +1,8 @@
 """Unit tests for F5-TTS Neural Speech Synthesis Adapter."""
 
-import tempfile
+import io
 from pathlib import Path
-
+import tempfile
 import numpy as np
 import pytest
 import soundfile as sf  # type: ignore[import-untyped]

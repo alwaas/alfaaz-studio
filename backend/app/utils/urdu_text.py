@@ -2,6 +2,7 @@
 
 import re
 import unicodedata
+from typing import Optional
 
 # Standard Urdu punctuation marks
 URDU_KHATMA = "\u06D4"      # ۔ (Urdu Full Stop / Khatma)
@@ -44,7 +45,7 @@ DEFAULT_PRONUNCIATION_DICT: dict[str, str] = {
 class PronunciationDictionary:
     """Manager for Urdu phonetic and aerab pronunciation mappings."""
 
-    def __init__(self, custom_dict: dict[str, str] | None = None) -> None:
+    def __init__(self, custom_dict: Optional[dict[str, str]] = None) -> None:
         self.dictionary: dict[str, str] = dict(DEFAULT_PRONUNCIATION_DICT)
         if custom_dict:
             self.dictionary.update(custom_dict)

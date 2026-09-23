@@ -550,6 +550,69 @@ class RalfValidator:
             for error in self.errors:
                 print(f"  - {error}")
 
+    def validate_phase_8(self) -> Tuple[float, List[str]]:
+        """Validate Phase 8 completion (Production Hardening)"""
+        print("\n=== RALF Mode: Phase 8 Self-Review (Production Hardening) ===\n")
+
+        # Check Docker & Orchestration files
+        self.check_file_exists("infra/docker/Dockerfile.backend", "Backend Dockerfile")
+        self.check_file_exists("infra/docker/Dockerfile.frontend", "Frontend Dockerfile")
+        self.check_file_exists("docker-compose.yml", "Docker Compose configuration")
+
+        # Check Headless Reel Generator & Sample Output
+        self.check_file_exists("scripts/generate_sample_reel.py", "Headless sample reel generator")
+        self.check_file_exists("outputs/sample_ghalib_reel.mp4", "Pre-generated sample Ghalib reel")
+
+        # Check End-to-End Integration Test
+        self.check_file_exists("backend/tests/test_e2e_pipeline.py", "E2E Studio Pipeline test suite")
+
+        # Check Content in Dockerfile.backend
+        self.check_file_content(
+            "infra/docker/Dockerfile.backend",
+            ["python:3.11-slim", "ffmpeg", "libass", "fonts-noto-core", "uv", "alfaaz"],
+            "Production hardening in Dockerfile.backend",
+        )
+
+        # Check Content in Dockerfile.frontend
+        self.check_file_content(
+            "infra/docker/Dockerfile.frontend",
+            ["node:20-alpine", "deps", "builder", "runner", "nextjs"],
+            "Multi-stage build in Dockerfile.frontend",
+        )
+
+        # Check Content in docker-compose.yml
+        self.check_file_content(
+            "docker-compose.yml",
+            ["backend:", "frontend:", "redis:", "celery-worker:", "healthcheck:"],
+            "Multi-service composition in docker-compose.yml",
+        )
+
+        # Check Content in test_e2e_pipeline.py
+        self.check_file_content(
+            "backend/tests/test_e2e_pipeline.py",
+            ["test_full_e2e_studio_pipeline", "MockTTSProvider", "audio_dsp", "ASSSubtitleBuilder", "reel_renderer"],
+            "Complete pipeline validation in test_e2e_pipeline.py",
+        )
+
+        # Check Content in generate_sample_reel.py
+        self.check_file_content(
+            "scripts/generate_sample_reel.py",
+            ["velvet-gold", "Noto Nastaliq Urdu", "audio_dsp", "reel_renderer", "sample_ghalib_reel.mp4"],
+            "Headless reel pipeline in generate_sample_reel.py",
+        )
+
+        confidence = self.calculate_confidence()
+
+        print("\n=== Self-Review Summary ===")
+        print(f"Checks Passed: {self.checks_passed}/{self.checks_total}")
+        print(f"Confidence Score: {confidence:.2%}")
+        print(f"Errors: {len(self.errors)}")
+
+        if self.errors:
+            print("\n=== Errors ===")
+            for error in self.errors:
+                print(f"  - {error}")
+
         return confidence, self.errors
 
     def update_progress_file(self, phase: int, confidence: float, errors: List[str]):
@@ -612,6 +675,8 @@ if __name__ == "__main__":
         confidence, errors = validator.validate_phase_6()
     elif args.phase == 7:
         confidence, errors = validator.validate_phase_7()
+    elif args.phase == 8:
+        confidence, errors = validator.validate_phase_8()
     else:
         print(f"Phase {args.phase} validator not yet implemented")
         sys.exit(1)

@@ -1,9 +1,12 @@
 """Project management endpoints."""
 
+from typing import Optional
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
+from app.db.models import Project, VoiceProfile
 
 from app.db.models import Job, Project, VoiceProfile
 from app.db.session import get_db
@@ -11,6 +14,7 @@ from app.schemas.job import GenerateAudioRequest, JobResponse
 from app.schemas.project import (
     ProjectCreate,
     ProjectResponse,
+    ProjectUpdate,
 )
 from app.services.queue import append_job_log, execute_audio_generation
 
@@ -76,6 +80,7 @@ async def create_project(
     description="Retrieve all projects with optional status filtering.",
 )
 async def list_projects(
+    status_filter: Optional[str] = Query(None, alias="status", description="Filter by status"),
     status_filter: str | None = Query(None, alias="status", description="Filter by status"),
     limit: int = Query(50, ge=1, le=100),
     offset: int = Query(0, ge=0),

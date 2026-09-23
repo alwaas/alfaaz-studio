@@ -1,0 +1,67 @@
+# syntax=docker/dockerfile:1.4
+# AlfaazStudio Backend - Production Multi-Stage Dockerfile
+
+FROM python:3.11-slim AS builder
+
+WORKDIR /app
+
+# Install system build dependencies and FFmpeg with libass
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    curl \
+    git \
+    ffmpeg \
+    libass-dev \
+    fonts-noto-core \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install uv package manager
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
+
+# Copy dependency manifests
+COPY backend/pyproject.toml backend/requirements.txt ./
+
+# Install python dependencies into virtual environment
+RUN uv venv /opt/venv
+ENV VIRTUAL_ENV=/opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+RUN uv pip install -r requirements.txt
+
+# Final Runtime Image
+FROM python:3.11-slim AS runner
+
+WORKDIR /app
+
+# Install runtime FFmpeg, libass, and Urdu fonts
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ffmpeg \
+    fonts-noto-core \
+    ca-certificates \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy virtual environment from builder
+COPY --from=builder /opt/venv /opt/venv
+ENV VIRTUAL_ENV=/opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+
+# Copy backend code
+COPY backend/ /app/
+
+# Create non-root user and persistent directories
+RUN useradd -m -u 1001 alfaaz && \
+    mkdir -p /app/models /app/outputs /app/temp && \
+    chown -R alfaaz:alfaaz /app
+
+USER alfaaz
+
+EXPOSE 8000
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
+    CMD curl -f http://localhost:8000/api/v1/health || exit 1
+
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+

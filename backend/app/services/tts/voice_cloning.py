@@ -8,9 +8,9 @@ Performs reference audio preparation for zero-shot voice cloning (F5-TTS, etc.):
 - Duration constraint enforcement (3s-15s recommended optimal reference length)
 """
 
+from dataclasses import dataclass
 import io
 import math
-from dataclasses import dataclass
 from pathlib import Path
 
 import numpy as np
