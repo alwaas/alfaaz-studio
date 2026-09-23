@@ -97,12 +97,52 @@ export interface SystemDeviceTelemetry {
 export interface AudioMasteringSettings {
   speed: number;
   pitch: number;
-  enable_warm_eq: boolean;
-  enable_reverb: boolean;
-  enable_compression: boolean;
+  warmth_db: number;
+  air_db: number;
   reverb_wet: number;
+  room_size: number;
+  enable_compression: boolean;
+  compressor_threshold_db: number;
+  bgm_preset_id?: string | null;
   bgm_volume: number;
   ducking_depth_db: number;
+}
+
+export interface BGMPreset {
+  id: string;
+  name: string;
+  category: string;
+  description: string;
+}
+
+export interface AudioMasteringRequest {
+  asset_id: string;
+  speed?: number;
+  pitch?: number;
+  warmth_db?: number;
+  air_db?: number;
+  reverb_wet?: number;
+  room_size?: number;
+  enable_compression?: boolean;
+  compressor_threshold_db?: number;
+  bgm_preset_id?: string | null;
+  bgm_volume?: number;
+  ducking_depth_db?: number;
+}
+
+export interface AudioTrimRequest {
+  asset_id: string;
+  threshold_db?: number;
+}
+
+export interface AudioMasteringResponse {
+  asset_id: string;
+  project_id?: string | null;
+  filename: string;
+  duration: number;
+  sample_rate: number;
+  stream_url: string;
+  status: string;
 }
 
 export interface PoetryPreset {

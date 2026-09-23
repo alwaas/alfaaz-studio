@@ -3,6 +3,10 @@
  */
 
 import {
+  AudioMasteringRequest,
+  AudioMasteringResponse,
+  AudioTrimRequest,
+  BGMPreset,
   Job,
   Project,
   ProjectCreateInput,
@@ -134,6 +138,34 @@ export const api = {
 
   async getJobLogs(id: string): Promise<{ job_id: string; logs: string[] }> {
     const res = await fetch(`${API_BASE}/jobs/${id}/logs`);
+    return handleResponse(res);
+  },
+
+  // Audio Editor & Mastering
+  async getBgmPresets(): Promise<BGMPreset[]> {
+    const res = await fetch(`${API_BASE}/audio/bgm/presets`);
+    return handleResponse(res);
+  },
+
+  getAudioStreamUrl(assetId: string): string {
+    return `${API_BASE}/audio/assets/${assetId}/stream`;
+  },
+
+  async masterAudio(params: AudioMasteringRequest): Promise<AudioMasteringResponse> {
+    const res = await fetch(`${API_BASE}/audio/master`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(params),
+    });
+    return handleResponse(res);
+  },
+
+  async trimSilence(params: AudioTrimRequest): Promise<AudioMasteringResponse> {
+    const res = await fetch(`${API_BASE}/audio/trim-silence`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(params),
+    });
     return handleResponse(res);
   },
 };

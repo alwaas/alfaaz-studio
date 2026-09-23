@@ -438,6 +438,60 @@ class RalfValidator:
 
         return confidence, self.errors
 
+    def validate_phase_6(self) -> Tuple[float, List[str]]:
+        """Validate Phase 6 completion (Audio Editor)"""
+        print("\n=== RALF Mode: Phase 6 Self-Review (Audio Editor) ===\n")
+
+        # Check backend audio files
+        self.check_file_exists("backend/app/schemas/audio.py", "Audio mastering schemas")
+        self.check_file_exists("backend/app/api/v1/audio.py", "Audio editor & DSP API router")
+        self.check_file_exists("backend/tests/test_audio_api.py", "Audio API test suite")
+
+        # Check frontend audio editor components & types
+        self.check_file_exists("frontend/src/components/AudioEditor.tsx", "AudioEditor UI component")
+        self.check_file_exists("frontend/src/components/__tests__/AudioEditor.test.tsx", "AudioEditor unit tests")
+
+        # Check file content quality and critical symbols
+        self.check_file_content(
+            "backend/app/schemas/audio.py",
+            ["BGMPreset", "AudioMasteringRequest", "AudioMasteringResponse", "AudioTrimRequest"],
+            "Audio mastering schema models in audio.py",
+        )
+        self.check_file_content(
+            "backend/app/api/v1/audio.py",
+            ["/bgm/presets", "/assets/{asset_id}/stream", "/master", "/trim-silence"],
+            "Audio endpoints in backend audio.py",
+        )
+        self.check_file_content(
+            "frontend/src/components/AudioEditor.tsx",
+            ["wavesurfer", "AudioMasteringSettings", "seekToVerse", "handleApplyMastering", "handleTrimSilence"],
+            "Waveform player and DSP controls in AudioEditor.tsx",
+        )
+        self.check_file_content(
+            "frontend/src/services/api.ts",
+            ["getBgmPresets", "getAudioStreamUrl", "masterAudio", "trimSilence"],
+            "Audio mastering API client methods in api.ts",
+        )
+        self.check_file_content(
+            "frontend/src/types/index.ts",
+            ["AudioMasteringRequest", "AudioMasteringResponse", "BGMPreset"],
+            "Audio mastering types in frontend index.ts",
+        )
+
+        confidence = self.calculate_confidence()
+
+        print("\n=== Self-Review Summary ===")
+        print(f"Checks Passed: {self.checks_passed}/{self.checks_total}")
+        print(f"Confidence Score: {confidence:.2%}")
+        print(f"Errors: {len(self.errors)}")
+
+        if self.errors:
+            print("\n=== Errors ===")
+            for error in self.errors:
+                print(f"  - {error}")
+
+        return confidence, self.errors
+
     def update_progress_file(self, phase: int, confidence: float, errors: List[str]):
         """Update PROGRESS.md file"""
         phase_names = {
@@ -494,6 +548,8 @@ if __name__ == "__main__":
         confidence, errors = validator.validate_phase_4()
     elif args.phase == 5:
         confidence, errors = validator.validate_phase_5()
+    elif args.phase == 6:
+        confidence, errors = validator.validate_phase_6()
     else:
         print(f"Phase {args.phase} validator not yet implemented")
         sys.exit(1)

@@ -1,5 +1,11 @@
 """Schemas module initialization."""
 
+from app.schemas.audio import (
+    AudioMasteringRequest,
+    AudioMasteringResponse,
+    AudioTrimRequest,
+    BGMPreset,
+)
 from app.schemas.job import (
     GenerateAudioRequest,
     JobLogsResponse,
@@ -31,19 +37,23 @@ __all__ = [
     "HealthResponse",
     "ReadyResponse",
     "DeviceInfoResponse",
-    "ModelItem",
     "ModelStatusResponse",
-    "StorageLocationInfo",
+    "ModelItem",
     "StorageStatusResponse",
+    "StorageLocationInfo",
     "VoiceProfileCreate",
-    "VoiceProfileResponse",
     "VoiceProfileUpdate",
+    "VoiceProfileResponse",
     "ProjectCreate",
-    "ProjectResponse",
     "ProjectUpdate",
+    "ProjectResponse",
     "AudioAssetResponse",
     "VideoAssetResponse",
     "GenerateAudioRequest",
     "JobResponse",
     "JobLogsResponse",
+    "BGMPreset",
+    "AudioMasteringRequest",
+    "AudioTrimRequest",
+    "AudioMasteringResponse",
 ]
