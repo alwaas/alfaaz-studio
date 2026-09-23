@@ -17,7 +17,11 @@ import {
   VoiceProfile,
 } from "@/types";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "/api/v1";
+const API_BASE =
+  process.env.NEXT_PUBLIC_API_URL ||
+  (typeof window !== "undefined"
+    ? "http://localhost:8000/api/v1"
+    : "/api/v1");
 
 class ApiError extends Error {
   constructor(

@@ -1,4 +1,4 @@
-version: "3.8"
+
 
 services:
   backend:
@@ -45,6 +45,7 @@ services:
     environment:
       - NODE_ENV=production
       - NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
+      - BACKEND_INTERNAL_URL=http://backend:8000/api/v1/:path*
     depends_on:
       - backend
     healthcheck:

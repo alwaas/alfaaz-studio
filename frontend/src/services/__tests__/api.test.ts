@@ -20,7 +20,7 @@ describe("Frontend API Client Service", () => {
 
     const data = await api.getHealth();
     expect(data.status).toBe("healthy");
-    expect(global.fetch).toHaveBeenCalledWith("/api/v1/health");
+    expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining("/api/v1/health"));
   });
 
   it("fetches device hardware telemetry", async () => {
@@ -42,7 +42,7 @@ describe("Frontend API Client Service", () => {
     const data = await api.getDeviceTelemetry();
     expect(data.device).toBe("cuda");
     expect(data.gpu_name).toContain("RTX 4090");
-    expect(global.fetch).toHaveBeenCalledWith("/api/v1/system/device");
+    expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining("/api/v1/system/device"));
   });
 
   it("creates a new poetry project", async () => {
@@ -65,7 +65,7 @@ describe("Frontend API Client Service", () => {
 
     expect(created.id).toBe("proj-123");
     expect(global.fetch).toHaveBeenCalledWith(
-      "/api/v1/projects",
+      expect.stringContaining("/api/v1/projects"),
       expect.objectContaining({
         method: "POST",
       })
